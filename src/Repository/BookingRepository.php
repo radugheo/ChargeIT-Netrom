@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Booking;
+use App\Entity\Station;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +21,12 @@ class BookingRepository extends ServiceEntityRepository
     public function getBookingsById ($idStation){
         $sql = "SELECT b FROM App\Entity\Booking b JOIN App\Entity\Station s WHERE s.id = ?1 AND b.station = s";
         return $this->getEntityManager()->createQuery($sql)->setParameter(1, $idStation)->getResult();
+    }
+
+    public function getUserBookingsByCarId (User $user) : array{
+        $dql = 'SELECT b FROM App\Entity\Booking b JOIN App\Entity\Car c WHERE c = b.car AND c.user = :user';
+        $query = $this->getEntityManager()->createQuery($dql)->setParameter('user', $user);
+        return $query->getResult();
     }
 
     public function __construct(ManagerRegistry $registry)

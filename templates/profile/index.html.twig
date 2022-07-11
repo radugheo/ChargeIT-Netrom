@@ -1,9 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Charge-IT - Statii{% endblock %}
+{% block title %}Hello ProfileController!{% endblock %}
 
 {% block body %}
-
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
@@ -39,39 +38,62 @@
             {% endif %}
         </div>
     </nav>
-    <h3>Stations</h3>
+    <h1>Hello {{ app.user.userIdentifier }}!</h1>
+    <h3>Add car</h3>
     <div>
-        <p>{{ form_start(formFilter) }}
-            {{ form_row(formFilter.city) }}
-            {{ form_row(formFilter.charge_type) }}
-        {{ form_end(formFilter) }}</p>
+        <p>{{ form_start(addCarForm) }}
+            {{ form_row(addCarForm.license_plate) }}
+            {{ form_row(addCarForm.charge_type) }}
+            {{ form_end(addCarForm) }}</p>
     </div>
+    <a href="/">Go Back</a>
+    <h3>Your cars</h3>
     <table class="table table-striped table-active">
         <thead class="table-dark">
         <tr>
             <th scope="col">#id</th>
+            <th scope="col">License Plate</th>
+            <th scope="col">Charge Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for car in userCars %}
+            <tr>
+                <th scope="row">{{ car.id }}</th>
+                <td>{{ car.licenseplate }}</td>
+                <td>{{ car.chargetype }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h3>Your bookings</h3>
+    <table class="table table-striped table-active">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">#id</th>
+            <th scope="col">Car</th>
             <th scope="col">Location</th>
-            <th scope="col">City</th>
-            <th scope="col">Power</th>
-            <th scope="col">Charging type</th>
+            <th scope="col">Station ID</th>
+            <th scope="col">Charge Start</th>
+            <th scope="col">Charge End</th>
             <th scope="col"></th>
         </tr>
         </thead>
-            <tbody>
-            {% for station in stations %}
-                <tr>
-                    <th scope="row">{{ station.id }}</th>
-                    <td>{{ station.location.name }}</td>
-                    <td>{{ station.location.city }}</td>
-                    <td>{{ station.power }} kW</td>
-                    <td>{{ station.chargetype }}</td>
-                    <td>
-                        <a href="{{ station.id ~ url }}" class="button button--link"> Book </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
+        <tbody>
+        {% for booking in userBookings %}
+            <tr>
+                <th scope="row">{{ booking.id }}</th>
+                <td>{{ booking.car.licenseplate }}</td>
+                <td>{{ booking.station.location.name }}</td>
+                <td>{{ booking.station.id }}</td>
+                <td>{{ booking.chargestart |date('d-m-Y H:i')}}</td>
+                <td>{{ booking.chargeend |date('d-m-Y H:i')}}</td>
+                <td>
+                    <a href="/booking/{{booking.id}}/edit" class="button button--link"> Edit </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
     </table>
-
 </div>
 {% endblock %}

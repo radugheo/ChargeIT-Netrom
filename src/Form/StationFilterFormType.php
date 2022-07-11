@@ -40,7 +40,7 @@ class StationFilterFormType extends AbstractType
                 }]
             )
             ->add('submit', SubmitType::class, [
-                'label' => 'Filtreaza'
+                'label' => 'Filter'
             ]);
     }
 }
